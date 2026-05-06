@@ -1,0 +1,80 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "utvaa"
+version = "1.0.0"
+description = "UltraLightBlockNet: Efficient Hybrid CNN-Transformer for Image Classification"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.9"
+authors = [
+    { name = "Nishankar", email = "nishannishankar@gmail.com" }
+]
+keywords = [
+    "deep-learning",
+    "computer-vision",
+    "image-classification",
+    "lightweight",
+    "transformer",
+    "CNN",
+    "MobileViT",
+    "CIFAR-100",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+]
+dependencies = [
+    "torch>=2.1.0",
+    "torchvision>=0.16.0",
+    "einops>=0.7.0",
+    "scikit-learn>=1.3.0",
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    "matplotlib>=3.7.0",
+    "pyyaml>=6.0",
+    "psutil>=5.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "torchinfo>=1.8.0",
+    "calflops>=0.2.0",
+    "pytest>=7.0",
+    "black>=23.0",
+    "isort>=5.12",
+    "flake8>=6.0",
+]
+
+[project.urls]
+Homepage   = "https://github.com/nishan-charlie/Utvaa"
+Repository = "https://github.com/nishan-charlie/Utvaa"
+Issues     = "https://github.com/nishan-charlie/Utvaa/issues"
+
+[project.scripts]
+utvaa-train    = "train:main"
+utvaa-evaluate = "evaluate:main"
+
+[tool.setuptools.packages.find]
+where   = ["."]
+include = ["utvaa*"]
+
+[tool.setuptools.package-data]
+"*" = ["configs/*.yaml"]
+
+[tool.black]
+line-length    = 100
+target-version = ["py39", "py310", "py311"]
+
+[tool.isort]
+profile     = "black"
+line_length = 100

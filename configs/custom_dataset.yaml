@@ -1,0 +1,28 @@
+# ---------------------------------------------------------------
+# UltraLightBlockNet — custom pre-split dataset configuration
+# Pre-saved splits: train_dataset.pt / val_dataset.pt / test_dataset.pt
+# ---------------------------------------------------------------
+
+model:
+  variant: tiny           # tiny | medium | large | xlarge
+  num_classes: null       # inferred automatically from the loaded dataset
+  image_size: 256
+
+training:
+  epochs: 400
+  batch_size: 32
+  val_batch_multiplier: 3  # val/test batch_size = batch_size * val_batch_multiplier
+  learning_rate: 0.001
+  min_lr: 1.0e-5
+  weight_decay: 0.001
+  patience: 30            # early-stopping patience (epochs, based on val loss)
+  t_max: 400              # CosineAnnealingLR T_max
+  label_smoothing: 0.01
+
+data:
+  dir: /path/to/custom/data   # must contain train_dataset.pt, val_dataset.pt, test_dataset.pt
+  num_workers: 4
+
+output:
+  dir: ./outputs
+  model_name: UltraLightBlockNet

@@ -15,13 +15,13 @@ UltraLightBlockNet (Utvaa) is an ultra-lightweight neural network that fuses **d
 
 ### Key Properties
 
-| Property | Detail |
-|---|---|
-| Input resolution | 256 × 256 |
-| Dataset | CIFAR-100 (100 classes) |
-| Attention complexity | Linear O(N) |
-| Augmentation | CutMix + MixUp + RandAugment |
-| Training strategy | AdamW + Linear Warmup + Cosine Annealing |
+| Property             | Detail                                   |
+| -------------------- | ---------------------------------------- |
+| Input resolution     | 256 × 256                                |
+| Dataset              | CIFAR-100 (100 classes)                  |
+| Attention complexity | Linear O(N)                              |
+| Augmentation         | CutMix + MixUp + RandAugment             |
+| Training strategy    | AdamW + Linear Warmup + Cosine Annealing |
 
 ---
 
@@ -60,12 +60,12 @@ Classifier ──► Dropout + Linear ──► num_classes
 
 ## Model Variants
 
-| Variant | Dims | Channels | Params (approx.) |
-|---|---|---|---|
-| **Tiny**   | [48, 64]   | [8, 16, 32, 48, 288]   | ~0.6 M |
-| **Medium** | [96, 112]  | [8, 32, 64, 96, 352]   | ~1.8 M |
-| **Large**  | [112, 132] | [8, 32, 72, 128, 416]  | ~3.1 M |
-| **XLarge** | [112, 132] | [8, 32, 72, 198, 616]  | ~5.4 M |
+| Variant    | Dims       | Channels              | Params (approx.) |
+| ---------- | ---------- | --------------------- | ---------------- |
+| **Tiny**   | [48, 64]   | [8, 16, 32, 48, 288]  | ~0.6 M           |
+| **Medium** | [96, 112]  | [8, 32, 64, 96, 352]  | ~1.8 M           |
+| **Large**  | [112, 132] | [8, 32, 72, 128, 416] | ~3.1 M           |
+| **XLarge** | [112, 132] | [8, 32, 72, 198, 616] | ~5.4 M           |
 
 ---
 
@@ -74,19 +74,21 @@ Classifier ──► Dropout + Linear ──► num_classes
 ```
 Utvaa/
 ├── configs/
-│   └── cifar100.yaml          # All hyperparameters — edit here
+│   ├── cifar100.yaml          # CIFAR-100 hyperparameters
+│   └── custom_dataset.yaml    # Custom pre-split dataset hyperparameters
 ├── utvaa/
 │   ├── models/
 │   │   └── ultralight_net.py  # UltraLightBlockNet_L1 and all sub-modules
 │   ├── data/
-│   │   └── datasets.py        # DataLoader utilities
+│   │   └── datasets.py        # DataLoader utilities + TransformDataset
 │   ├── engine/
 │   │   └── trainer.py         # train_one_epoch / evaluate_model
 │   └── utils/
 │       └── helpers.py         # Checkpointing, plotting, t-SNE
 ├── assets/
 │   └── architecture.png       # Overall architecture diagram
-├── train.py                   # Training entry point
+├── train.py                   # CIFAR-100 training entry point
+├── train_custom.py            # Custom pre-split dataset training entry point
 ├── evaluate.py                # Checkpoint evaluation entry point
 ├── requirements.txt
 ├── setup.py
@@ -123,7 +125,7 @@ pip install -e ".[dev]"
 
 ## Dataset Preparation
 
-CIFAR-100 is downloaded automatically on first run via `torchvision.datasets.CIFAR100`.  
+CIFAR-100 is downloaded automatically on first run via `torchvision.datasets.CIFAR100`.
 Set `data.dir` in `configs/cifar100.yaml` to the directory where it should be stored,
 or pass `--data-dir /path/to/cifar100` on the command line.
 
@@ -135,6 +137,8 @@ or pass `--data-dir /path/to/cifar100` on the command line.
 ---
 
 ## Training
+
+### CIFAR-100
 
 ```bash
 # Train with default Large variant
@@ -153,21 +157,48 @@ python train.py --config configs/cifar100.yaml \
                 --device cuda:1
 ```
 
+### Custom pre-split dataset
+
+For datasets pre-saved as `train_dataset.pt` / `val_dataset.pt` / `test_dataset.pt`
+(PyTorch `Subset` objects via `torch.save`).  Early stopping tracks **validation loss**.
+
+```bash
+python train_custom.py --config configs/custom_dataset.yaml \
+                       --data-dir /path/to/custom/data
+
+python train_custom.py --config configs/custom_dataset.yaml \
+                       --data-dir /path/to/custom/data \
+                       --variant large --device cuda:0
+```
+
 Checkpoints, metrics CSV, t-SNE plots, and loss-curve figures are saved under `outputs/<model_name>_<timestamp>/`.
 
-### Key Hyperparameters (`configs/cifar100.yaml`)
+### Key Hyperparameters
 
-| Parameter | Default | Description |
-|---|---|---|
-| `model.variant` | `large` | Architecture size (tiny / medium / large / xlarge) |
-| `training.epochs` | 1000 | Maximum epochs (early stopping applies) |
-| `training.batch_size` | 96 | Mini-batch size |
-| `training.learning_rate` | 1e-4 | Peak learning rate |
-| `training.patience` | 200 | Early-stopping patience |
-| `training.warmup_epochs` | 10 | Linear warm-up epochs |
-| `training.t_max` | 200 | Cosine annealing period |
-| `augmentation.mixup_alpha` | 2.5 | MixUp α |
-| `augmentation.cutmix_alpha` | 3.5 | CutMix α |
+#### `configs/cifar100.yaml`
+
+| Parameter                   | Default | Description                                        |
+| --------------------------- | ------- | -------------------------------------------------- |
+| `model.variant`             | `large` | Architecture size (tiny / medium / large / xlarge) |
+| `training.epochs`           | 1000    | Maximum epochs (early stopping applies)            |
+| `training.batch_size`       | 96      | Mini-batch size                                    |
+| `training.learning_rate`    | 1e-4    | Peak learning rate                                 |
+| `training.patience`         | 200     | Early-stopping patience (val accuracy)             |
+| `training.warmup_epochs`    | 10      | Linear warm-up epochs                              |
+| `training.t_max`            | 200     | Cosine annealing period                            |
+| `augmentation.mixup_alpha`  | 2.5     | MixUp α                                            |
+| `augmentation.cutmix_alpha` | 3.5     | CutMix α                                           |
+
+#### `configs/custom_dataset.yaml`
+
+| Parameter                      | Default | Description                            |
+| ------------------------------ | ------- | -------------------------------------- |
+| `model.variant`                | `tiny`  | Architecture size                      |
+| `training.epochs`              | 400     | Maximum epochs                         |
+| `training.batch_size`          | 32      | Mini-batch size                        |
+| `training.learning_rate`       | 1e-3    | Peak learning rate                     |
+| `training.patience`            | 30      | Early-stopping patience (val loss)     |
+| `training.val_batch_multiplier`| 3       | val/test batch = batch × this          |
 
 ---
 
@@ -264,7 +295,5 @@ This project is released under the [MIT License](LICENSE).
 
 ## Acknowledgements
 
-The linear self-attention mechanism is adapted from [MobileViTv2](https://arxiv.org/abs/2206.02680).  
+The linear self-attention mechanism is adapted from [MobileViTv2](https://arxiv.org/abs/2206.02680).
 Coordinate Attention is adapted from [Hou et al., 2021](https://arxiv.org/abs/2103.02907).
-#   U t V A A  
- 

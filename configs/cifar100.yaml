@@ -1,0 +1,37 @@
+# ---------------------------------------------------------------
+# UltraLightBlockNet — CIFAR-100 training configuration
+# ---------------------------------------------------------------
+
+model:
+  variant: large          # tiny | medium | large | xlarge
+  num_classes: 100
+  image_size: 256
+
+training:
+  epochs: 1000
+  batch_size: 96
+  learning_rate: 0.0001
+  min_lr: 1.0e-6
+  weight_decay: 0.01
+  patience: 200           # early-stopping patience (epochs)
+  warmup_epochs: 10
+  t_max: 200              # CosineAnnealingLR T_max
+  label_smoothing: 0.1
+  grad_accum_steps: 4
+
+augmentation:
+  mixup_alpha: 2.5
+  cutmix_alpha: 3.5
+  color_jitter: 0.5
+  random_erasing_prob: 0.5
+  rand_augment_ops: 3
+  rand_augment_magnitude: 12
+
+data:
+  dir: /path/to/cifar100   # overridden by --data-dir flag
+  num_workers: 4
+  val_split: 0.1           # fraction of train set used for validation
+
+output:
+  dir: ./outputs
+  model_name: UltraLightBlockNet_L1
