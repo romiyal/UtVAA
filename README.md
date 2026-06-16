@@ -1,4 +1,4 @@
-# Ultra-tiny Vision Transformer with Affix Attention : UtVAA
+# UtVAA : Ultra-tiny Vision Transformer with Affix Attention 
 
 **Ultra-tiny Vision Transformer with Affix Attention for Mobile Image Classification**
 
