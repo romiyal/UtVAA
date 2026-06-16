@@ -1,4 +1,4 @@
-# Ultra-tiny Vision Transformer with Affix Attention : Utvaa
+# Ultra-tiny Vision Transformer with Affix Attention : UtVAA
 
 **Ultra-tiny Vision Transformer with Affix Attention for Mobile Image Classification**
 
@@ -11,7 +11,7 @@
 
 ## Overview
 
-Utvaa is an ultra-lightweight neural network that fuses **depthwise dilated convolutions** with a novel **AffixAttentionBlock** — a hybrid module that combines linear-complexity self-attention (inspired by MobileViTv2) with **Coordinate Attention** for spatially-aware channel recalibration. The architecture achieves competitive accuracy on CIFAR-100 under strict parameter and FLOPs budgets, making it suitable for resource-constrained inference.
+UtVAA is an ultra-lightweight neural network that fuses **depthwise dilated convolutions** with a novel **AffixAttentionBlock** — a hybrid module that combines linear-complexity self-attention (inspired by MobileViTv2) with **Coordinate Attention** for spatially-aware channel recalibration. The architecture achieves competitive accuracy on CIFAR-100 under strict parameter and FLOPs budgets, making it suitable for resource-constrained inference.
 
 ### Key Properties
 
@@ -27,7 +27,7 @@ Utvaa is an ultra-lightweight neural network that fuses **depthwise dilated conv
 
 ## Architecture
 
-![Utvaa Overall Architecture](assets/architecture.png)
+![UtVAA Overall Architecture](assets/architecture.png)
 
 ```
 Input (3 × 256 × 256)
@@ -72,7 +72,7 @@ Classifier ──► Dropout + Linear ──► num_classes
 ## Repository Structure
 
 ```
-Utvaa/
+UtVAA/
 ├── configs/
 │   ├── cifar100.yaml          # CIFAR-100 hyperparameters
 │   └── custom_dataset.yaml    # Custom pre-split dataset hyperparameters
