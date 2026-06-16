@@ -1,6 +1,6 @@
-# UltraLightBlockNet (Utvaa)
+# Ultra-tiny Vision Transformer with Affix Attention : Utvaa
 
-**An Ultra-Lightweight Hybrid CNN–Transformer Architecture for Efficient Image Classification**
+**Ultra-tiny Vision Transformer with Affix Attention for Mobile Image Classification**
 
 [![PyPI](https://img.shields.io/pypi/v/utvaa.svg)](https://pypi.org/project/utvaa/)
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/)
@@ -11,7 +11,7 @@
 
 ## Overview
 
-UltraLightBlockNet (Utvaa) is an ultra-lightweight neural network that fuses **depthwise dilated convolutions** with a novel **AffixAttentionBlock** — a hybrid module that combines linear-complexity self-attention (inspired by MobileViTv2) with **Coordinate Attention** for spatially-aware channel recalibration. The architecture achieves competitive accuracy on CIFAR-100 under strict parameter and FLOPs budgets, making it suitable for resource-constrained inference.
+Utvaa is an ultra-lightweight neural network that fuses **depthwise dilated convolutions** with a novel **AffixAttentionBlock** — a hybrid module that combines linear-complexity self-attention (inspired by MobileViTv2) with **Coordinate Attention** for spatially-aware channel recalibration. The architecture achieves competitive accuracy on CIFAR-100 under strict parameter and FLOPs budgets, making it suitable for resource-constrained inference.
 
 ### Key Properties
 
